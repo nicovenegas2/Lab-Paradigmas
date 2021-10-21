@@ -1,0 +1,19 @@
+Tdas:
+    usuarios:
+        -nombre 
+        -contraseña
+    Paradigmadocs:
+        -Documentos
+        -lista de usuarios
+        -Nombre Plataforma
+    Documentos:
+        -Autor
+        -Id
+        -Fecha de creacion
+        -historial
+        -Nombre
+        -Contenido
+        -usuarios
+        -Permisos de usuarios
+    
+cada elemento del tda debe tener por lo menos un selector y modificador de get y set
