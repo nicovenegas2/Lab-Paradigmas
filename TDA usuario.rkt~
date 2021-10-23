@@ -3,14 +3,6 @@
 ; (nombre, contraseña)
 ; se tomara en consideracion que los usuarios siempren se almacenaran en listas para funciones de busqueda
 
-
-(provide usuario)
-(provide getUser)
-(provide getPass)
-(provide user?)
-(provide userName?)
-(provide userLog?)
-
 ; Constructor de un usuario
 ; Dom: StringXString
 ; Rec: usuario
@@ -37,14 +29,14 @@
 ; verificar si el nombre de usuario es igual un string
 ; Dom: usuarioXString
 ; Rec: Boolean
-(define (userName? usuario texto)(= texto (getUser usuario)))
+(define (compNombre usuario texto)(= texto (car usuario)))
 
 ; Comprobar si un user y un password entregado concide con el usuario
 ; Dom: usuarioXStringXString
 ; Rec: Boolean
-(define (userLog? usuario user pass) (and
-                                     (= user (getUser usuario) )
-                                     (= pass (getPass usuario))))
+(define (userLog usuario user pass) (and
+                                     (= user (car usuario) )
+                                     (= pass (cdr usuario))))
 
 
 

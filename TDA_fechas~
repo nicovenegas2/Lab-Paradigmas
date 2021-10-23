@@ -1,0 +1,6 @@
+#lang racket
+; se define de siguiente forma una representacion de fechas
+; (dia, mes año)
+
+(define (Date dia mes agno)(list dia mes agno))
+(define )
