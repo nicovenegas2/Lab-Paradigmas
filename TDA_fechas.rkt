@@ -2,6 +2,11 @@
 ; se define de siguiente forma una representacion de fechas
 ; (dia, mes año) --> (String, String, String)
 
+(provide Date)
+(provide DateGetDia)
+(provide DategetMes)
+(provide DateGetAgno)
+(provide DateString)
 
 ; constuctor de una fecha
 ; Dominio: NumeroXNumeroXNumero
@@ -12,21 +17,21 @@
 ; extrae el dia de una Fecha(Date)
 ; Dominio: Date
 ; Recorrido: String
-(define (getDia Date) (car Date))
+(define (DateGetDia Date) (car Date))
 
 ; extrae el mes de una Fecha(Date)
 ; Dominio: Date
 ; Recorrido: String
-(define (getMes Date) (list-ref Date 1))
+(define (DategetMes Date) (list-ref Date 1))
 
 ; extrae el año de una Fecha(Date)
 ; Dominio: Date
 ; Recorrido: String
-(define (getAgno Date) (list-ref Date 2))
+(define (DateGetAgno Date) (list-ref Date 2))
 
 
 ; extrae la fecha completa de un Date como un String
 ; Dominio: Date
 ; Recorrido: String
 (define (DateString Date) (
-                          string-append (getDia Date) " " (getMes Date) " "(getAgno Date)))
+                          string-append (DateGetDia Date) " " (DategetMes Date) " "(DateGetAgno Date)))

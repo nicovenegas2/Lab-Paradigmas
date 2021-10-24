@@ -2,11 +2,6 @@
 ; se define de siguiente forma una representacion de fechas
 ; (dia, mes año) --> (String, String, String)
 
-(provide Date)
-(provide GetDia)
-(provide GetMes)
-(provide GetAgno)
-(provide DateString)
 
 ; constuctor de una fecha
 ; Dominio: NumeroXNumeroXNumero
