@@ -2,7 +2,7 @@
 ; se define de siguiente forma una representacion de fechas
 ; (dia, mes año) --> (String, String, String)
 
-(provide Date)
+(provide date)
 (provide DateGetDia)
 (provide DateGetMes)
 (provide DateGetAgno)
@@ -11,7 +11,7 @@
 ; constuctor de una fecha
 ; Dominio: NumeroXNumeroXNumero
 ; Recorrido: una fecha
-(define (Date dia mes agno)(list (format "~v" dia) (format "~v" mes) (format "~v" agno)))
+(define (date dia mes agno)(list (format "~v" dia) (format "~v" mes) (format "~v" agno)))
 
 
 ; extrae el dia de una Fecha(Date)

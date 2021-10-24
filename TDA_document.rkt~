@@ -5,7 +5,18 @@
 (require "TDA_fechas.rkt")
 (require "TDA_usuarios.rkt")
 
-
+(provide to-string)
+(provide documento)
+(provide DocumentGetId)
+(provide DocumentGetAutor)
+(provide DocumentGetDate)
+(provide DocumentGetVersions)
+(provide DocumentGetNombre)
+(provide DocumentGetContent)
+(provide DocumentGetUsers)
+(provide DocumentGetPerms)
+(provide DocumentInfo)
+(provide DocumentAddContent)
 
 ; Funcion de apoyo que transforma numeros a string
 ; Dom: Numero
@@ -77,9 +88,9 @@
                                          "Contenido: " "\n" "\"" (DocumentGetContent documento) "\"" "\n"
                                          "usuarios compartidos: " ))
 
-(define (DocumentAddContent documento texto) (define documento (
+(define (DocumentAddContent documento texto) (
                                         Document-set documento 5 (
-                                                           string-append (DocumentGetContent documento) texto))))
+                                                           string-append (DocumentGetContent documento) texto)))
 
 ;pruebas
 (define hoy (Date 03 05 2002))
