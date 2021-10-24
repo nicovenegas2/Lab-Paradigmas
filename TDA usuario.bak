@@ -1,0 +1,10 @@
+#lang racket
+; Se definira el tda usuario con los siguientes elementos
+; (nombre, contraseña)
+
+(define (usuario user cont) (
+                             list user cont))
+
+(define (getUser usuario) (car usuario))
+(define (getPass usuario) (cdr usuario))
+
