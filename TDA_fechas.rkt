@@ -4,7 +4,7 @@
 
 (provide Date)
 (provide DateGetDia)
-(provide DategetMes)
+(provide DateGetMes)
 (provide DateGetAgno)
 (provide DateString)
 
@@ -22,7 +22,7 @@
 ; extrae el mes de una Fecha(Date)
 ; Dominio: Date
 ; Recorrido: String
-(define (DategetMes Date) (list-ref Date 1))
+(define (DateGetMes Date) (list-ref Date 1))
 
 ; extrae el año de una Fecha(Date)
 ; Dominio: Date
@@ -34,4 +34,4 @@
 ; Dominio: Date
 ; Recorrido: String
 (define (DateString Date) (
-                          string-append (DateGetDia Date) " " (DategetMes Date) " "(DateGetAgno Date)))
+                          string-append (DateGetDia Date) "|"  (DateGetMes Date) "|"(DateGetAgno Date)))
