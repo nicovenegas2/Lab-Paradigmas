@@ -13,12 +13,14 @@
 (provide user-set)
 (provide user-next)
 (provide user-first)
+(provide user-empty)
 
 
 
 (define user-set list-set)
 (define user-next cdr)
 (define user-first car)
+(define user-empty '())
 ; Constructor de un usuario
 ; Dom: StringXString
 ; Rec: usuario
@@ -45,14 +47,14 @@
 ; verificar si el nombre de usuario es igual un string
 ; Dom: usuarioXString
 ; Rec: Boolean
-(define (userName? usuario texto)(= texto (getUser usuario)))
+(define (userName? usuario texto)(equal? texto (getUser usuario)))
 
 ; Comprobar si un user y un password entregado concide con el usuario
 ; Dom: usuarioXStringXString
 ; Rec: Boolean
 (define (userLog? usuario user pass) (and
-                                     (= user (getUser usuario) )
-                                     (= pass (getPass usuario))))
+                                     (equal? user (getUser usuario) )
+                                     (equal? pass (getPass usuario))))
 
 
 
