@@ -8,6 +8,18 @@
 (require "encriptar.rkt")
 
 
+
+(provide paradigmadocs)
+(provide ParaGetNombre)
+(provide ParaGetDate)
+(provide ParaGetUsers)
+(provide ParaGetDocuments)
+(provide ParaGetEncrypt)
+(provide ParaGetDecrypt)
+(provide ParaAddUser)
+(provide ParaInfo)
+
+
 ; Constructor de un paradigmadocs(plataforma)
 ; Dom: String X Date X EncryptFunction X DecryptFunction
 ; Rec: paradigmadocs
@@ -48,10 +60,14 @@
                                      user-set paradigmadocs 2 (
                                                                append (ParaGetUsers paradigmadocs) usuario)))
 
+
 (define (ParaInfo paradigmadocs) (
                                   string-append "Nombre de la plataforma: " (ParaGetNombre paradigmadocs) "\n"
                                                 "Fecha de creacion: " (DateString (ParaGetDate paradigmadocs)) "\n"
-                                                "" "\n"))
+                                                "documentos creados: " "\n"))
+
+(define (ParaSetUsers paradigmadocs users) (
+                                            user-set paradigmadocs 2 (users)))
 
 
 

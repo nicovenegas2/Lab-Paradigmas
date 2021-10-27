@@ -11,11 +11,14 @@
 (provide userName?)
 (provide userLog?)
 (provide user-set)
+(provide user-next)
+(provide user-first)
 
 
 
 (define user-set list-set)
-
+(define user-next cdr)
+(define user-first car)
 ; Constructor de un usuario
 ; Dom: StringXString
 ; Rec: usuario
