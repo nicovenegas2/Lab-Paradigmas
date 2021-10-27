@@ -28,6 +28,14 @@
                                                                                                          (usuario username password)
                                                                                                          0 user-empty )))
 
+(define (create paradigmadocs nombre contenido) (
+                                                 if (loged? paradigmadocs) (ParaAddDocument (document (+ 1 (ParaLastId paradigmadocs))  )  )
+                                                    paradigmadocs))
+
+
+
+
+
 ;pruebas
 (define us1 (usuario "nicovenegas" "1234"))
 (define word (paradigmadocs "word" (date 24 10 2021) encryptFn encryptFn))

@@ -1,0 +1,8 @@
+#lang racket
+
+(define (suma a b) (+ a b))
+
+(define (elector a b) (if (equal? a suma) (
+                                           lambda (c) (suma c b)) #f))
+
+

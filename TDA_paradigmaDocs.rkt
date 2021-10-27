@@ -1,6 +1,6 @@
 #lang racket
 ; se define el TDA de paradigmaDocs con la siguiente implementacion de lista
-; (nombrePlataforma, FechaCreacion, (usuarios), (documentos), funcion encriptar, funcion desencriptar)
+; (nombrePlataforma, FechaCreacion, (usuarios), (documentos), funcion encriptar, funcion desencriptar, usuarioLogeado?)
 
 (require "TDA_fechas.rkt")
 (require "TDA_usuarios.rkt")
@@ -18,12 +18,18 @@
 (provide ParaGetDecrypt)
 (provide ParaAddUser)
 (provide ParaInfo)
+(provide loged?)
+(provide logIn)
+(provide logOut)
+(provide ParaSetUsers)
+(provide ParaLastId)
+(provide ParaAddDocument)
 
 
 ; Constructor de un paradigmadocs(plataforma)
 ; Dom: String X Date X EncryptFunction X DecryptFunction
 ; Rec: paradigmadocs
-(define (paradigmadocs nombre date encriptar desencriptar) (list nombre date '() '() encriptar desencriptar))
+(define (paradigmadocs nombre date encriptar desencriptar) (list nombre date '() '() encriptar desencriptar #t))
 
 ; Funcion que extrae el nombre de un paradigmadocs
 ; Dom: paradigmadocs
@@ -55,6 +61,12 @@
 ; Rec: Funcion
 (define (ParaGetDecrypt paradigmadocs) (list-ref paradigmadocs 5))
 
+(define (loged? paradigmadocs) (list-ref paradigmadocs 6))
+
+(define (logIn paradigmadocs) (list-set paradigmadocs 6 #t))
+
+(define (logOut paradigmadocs) (list-set paradigmadocs 6 #f))
+
 
 (define (ParaAddUser paradigmadocs usuario) (
                                      user-set paradigmadocs 2 (
@@ -70,7 +82,13 @@
                                             user-set paradigmadocs 2 (users)))
 
 
+(define (ParaLastId paradigmadocs) (
+                                    if (null? (ParaGetDocuments paradigmadocs)) 0
+                                       (DocumentGetId (last (ParaGetDocuments paradigmadocs)))
+                                       ))
 
+(define (ParaAddDocument paradigmadocs document) (list-set paradigmadocs 3 (append (ParaGetDocuments paradigmadocs)
+                                                                                   document)))
 
 ;pruebas
 (define us1 (usuario "nicovenegas" "1234"))
