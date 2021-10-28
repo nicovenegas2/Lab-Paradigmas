@@ -24,12 +24,13 @@
 (provide ParaSetUsers)
 (provide ParaLastId)
 (provide ParaAddDocument)
+(provide ParaGetLoged)
 
 
 ; Constructor de un paradigmadocs(plataforma)
 ; Dom: String X Date X EncryptFunction X DecryptFunction
 ; Rec: paradigmadocs
-(define (paradigmadocs nombre date encriptar desencriptar) (list nombre date '() '() encriptar desencriptar #t))
+(define (paradigmadocs nombre date encriptar desencriptar) (list nombre date '() '() encriptar desencriptar user-empty))
 
 ; Funcion que extrae el nombre de un paradigmadocs
 ; Dom: paradigmadocs
@@ -61,11 +62,13 @@
 ; Rec: Funcion
 (define (ParaGetDecrypt paradigmadocs) (list-ref paradigmadocs 5))
 
-(define (loged? paradigmadocs) (list-ref paradigmadocs 6))
+(define (loged? paradigmadocs) (null? (list-ref paradigmadocs 6)))
 
-(define (logIn paradigmadocs) (list-set paradigmadocs 6 #t))
+(define (ParaGetLoged paradigmadocs) (list-ref paradigmadocs 6))
 
-(define (logOut paradigmadocs) (list-set paradigmadocs 6 #f))
+(define (logIn paradigmadocs usuario) (list-set paradigmadocs 6 usuario))
+
+(define (logOut paradigmadocs) (list-set paradigmadocs 6 user-empty))
 
 
 (define (ParaAddUser paradigmadocs usuario) (
@@ -81,7 +84,7 @@
 (define (ParaSetUsers paradigmadocs users) (
                                             user-set paradigmadocs 2 (users)))
 
-
+;sale numero
 (define (ParaLastId paradigmadocs) (
                                     if (null? (ParaGetDocuments paradigmadocs)) 0
                                        (DocumentGetId (last (ParaGetDocuments paradigmadocs)))

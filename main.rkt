@@ -29,8 +29,9 @@
                                                                                                          0 user-empty )))
 
 (define (create paradigmadocs nombre contenido) (
-                                                 if (loged? paradigmadocs) (ParaAddDocument (document (+ 1 (ParaLastId paradigmadocs))  )  )
-                                                    paradigmadocs))
+                                                 if (loged? paradigmadocs) paradigmadocs (ParaAddDocument paradigmadocs (documento (+ 1 (ParaLastId paradigmadocs))
+                                                                                                      (getUser (ParaGetLoged paradigmadocs))
+                                                                                                      (date 00 00 00) contenido))))
 
 
 
