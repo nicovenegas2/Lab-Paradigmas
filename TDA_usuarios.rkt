@@ -9,7 +9,7 @@
 (provide getPass)
 (provide user?)
 (provide userName?)
-(provide userLog?)
+(provide userCanLog?)
 (provide user-set)
 (provide user-next)
 (provide user-first)
@@ -35,7 +35,7 @@
 ; obtencion de la contraseña de un usuario
 ; Dom: usuario
 ; Rec: String
-(define (getPass usuario) (cdr usuario))
+(define (getPass usuario) (list-ref usuario 1))
 
 ; comprobacion de si es un usuario o no
 ; Dom: SupuestoUser
@@ -52,7 +52,7 @@
 ; Comprobar si un user y un password entregado concide con el usuario
 ; Dom: usuarioXStringXString
 ; Rec: Boolean
-(define (userLog? usuario user pass) (and
+(define (userCanLog? usuario user pass) (and
                                      (equal? user (getUser usuario) )
                                      (equal? pass (getPass usuario))))
 

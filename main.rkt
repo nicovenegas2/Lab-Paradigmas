@@ -22,16 +22,23 @@
                       
   )
 
+(define (checkLogCola userList user pass) (
+                                                if (null? userList) #f (
+                                                                        if (userCanLog? (car userList) user pass) #t (checkLogCola (user-next userList) user pass)  )))
+
 (define (register paradigmadocs date username password) (
                                                          user-set paradigmadocs 2 (
                                                                                    agregarUsuarioNatural (ParaGetUsers paradigmadocs)
                                                                                                          (usuario username password)
                                                                                                          0 user-empty )))
+(define (login paradigmadocs user pass funcion) (
+                                                 if (equal? funcion create)   (if) ))
 
-(define (create paradigmadocs nombre contenido) (
+
+(define (create paradigmadocs date nombre contenido) (
                                                  if (loged? paradigmadocs) paradigmadocs (ParaAddDocument paradigmadocs (documento (+ 1 (ParaLastId paradigmadocs))
                                                                                                       (getUser (ParaGetLoged paradigmadocs))
-                                                                                                      (date 00 00 00) contenido))))
+                                                                                                      date contenido))))
 
 
 
@@ -42,7 +49,8 @@
 (define word (paradigmadocs "word" (date 24 10 2021) encryptFn encryptFn))
 (define hoy (date 03 05 2002))
 (define DC1 (documento 01 "nicolas" hoy "Documento 1" "hola que tal"))
-(define nico (usuario "nico" 1234))
+(define nico (usuario "nico" "1234"))
 (define vic (usuario "vic" 1234444))
-(define listalista (list (usuario "nico" 1234)))
-(define word1 (register word hoy "nico" 1234))
+(define listalista (list (usuario "nico" "1234" )))
+(define word1 (register word hoy "nico" "1234"))
+(define listaUsers (list nico vic))
