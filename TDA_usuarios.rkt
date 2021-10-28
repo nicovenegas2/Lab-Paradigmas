@@ -53,6 +53,7 @@
 ; Dom: usuarioXStringXString
 ; Rec: Boolean
 (define (userCanLog? usuario user pass) (and
+                                         
                                      (equal? user (getUser usuario) )
                                      (equal? pass (getPass usuario))))
 

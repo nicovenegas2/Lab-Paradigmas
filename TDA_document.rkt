@@ -38,7 +38,7 @@
 ; extrae el id de un documento
 ; Dominio: Documento
 ; Recorrido: Numero
-(define (DocumentGetId documento) (car documento))
+(define (DocumentGetId documento) (list-ref documento 0))
 
 ; extrae autor de un documento
 ; Dominio: Documento
@@ -81,12 +81,14 @@
 ; Recorrido: String
 
 (define (DocumentInfo documento) (
-                                  string-append "Id: " (to-string (DocumentGetId documento)) "\n"
+                                  string-append
+                                         "Id: " (to-string (DocumentGetId documento)) "\n"
                                          "autor: " (DocumentGetAutor documento) "\n"
                                          "Fecha de creacion: " (DateString (DocumentGetDate documento)) "\n"
                                          "Nombre: " (DocumentGetNombre documento) "\n"
                                          "Contenido: " "\n" "\"" (DocumentGetContent documento) "\"" "\n"
-                                         "usuarios compartidos: " ))
+                                         "usuarios compartidos: \n"
+                                         "-------------------------------------------\n"))
 
 (define (DocumentAddContent documento texto) (
                                         Document-set documento 5 (

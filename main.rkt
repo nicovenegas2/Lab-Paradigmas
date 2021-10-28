@@ -32,19 +32,21 @@
                                                                                                          (usuario username password)
                                                                                                          0 user-empty )))
 (define (login paradigmadocs user pass funcion) (
-                                                 if (equal? funcion create)   (if) ))
+                                                 if (equal? funcion create)   (
+                                                                               if (checkLogCola (ParaGetUsers paradigmadocs) user pass) (lambda (dt nb ct) (create (logIn paradigmadocs (usuario user pass)) dt nb ct)) (lambda (dt nb ct) (create paradigmadocs dt nb ct)))  finalIfGrande  ))
 
 
 (define (create paradigmadocs date nombre contenido) (
-                                                 if (loged? paradigmadocs) paradigmadocs (ParaAddDocument paradigmadocs (documento (+ 1 (ParaLastId paradigmadocs))
+                                                 if (loged? paradigmadocs) paradigmadocs (ParaAddDocument paradigmadocs (documento  (+ 1 (ParaLastId paradigmadocs))
                                                                                                       (getUser (ParaGetLoged paradigmadocs))
-                                                                                                      date contenido))))
+                                                                                                      date nombre contenido))))
 
 
 
 
 
 ;pruebas
+(define finalIfGrande 3)
 (define us1 (usuario "nicovenegas" "1234"))
 (define word (paradigmadocs "word" (date 24 10 2021) encryptFn encryptFn))
 (define hoy (date 03 05 2002))
@@ -54,3 +56,7 @@
 (define listalista (list (usuario "nico" "1234" )))
 (define word1 (register word hoy "nico" "1234"))
 (define listaUsers (list nico vic))
+(define gDocs1(register (register (register word (date 25 10 2021) "“user1”"   "“pass1”") (date 25 10 2021) "“user2”" "“pass2”") (date 25 10 2021) "user3" "pass3"))
+(define gDocs2 ((login gDocs1 "“user1”" "“pass1”" create) (date 30 08 2021) "“doc0”" "“contenido doc0”"))
+(display (ParaInfo gDocs2))
+

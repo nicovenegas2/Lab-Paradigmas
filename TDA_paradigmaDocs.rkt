@@ -79,7 +79,8 @@
 (define (ParaInfo paradigmadocs) (
                                   string-append "Nombre de la plataforma: " (ParaGetNombre paradigmadocs) "\n"
                                                 "Fecha de creacion: " (DateString (ParaGetDate paradigmadocs)) "\n"
-                                                "documentos creados: " "\n"))
+                                                "documentos creados: " "\n"
+                                                (string-join (map DocumentInfo (ParaGetDocuments paradigmadocs)))  ))
 
 (define (ParaSetUsers paradigmadocs users) (
                                             user-set paradigmadocs 2 (users)))
@@ -91,7 +92,7 @@
                                        ))
 
 (define (ParaAddDocument paradigmadocs document) (list-set paradigmadocs 3 (append (ParaGetDocuments paradigmadocs)
-                                                                                   document)))
+                                                                                   (list document))))
 
 ;pruebas
 (define us1 (usuario "nicovenegas" "1234"))
