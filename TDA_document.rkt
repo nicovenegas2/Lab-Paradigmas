@@ -94,6 +94,7 @@
                                         Document-set documento 5 (
                                                            string-append (DocumentGetContent documento) texto)))
 
+
 ;pruebas
 (define hoy (date 03 05 2002))
 (define DC1 (documento 01 "nicolas" hoy "Documento 1" "hola que tal"))
