@@ -31,17 +31,17 @@
                                                                                    agregarUsuarioNatural (ParaGetUsers paradigmadocs)
                                                                                                          (usuario username password)
                                                                                                          0 user-empty )))
-(define (login paradigmadocs user pass funcion) (
-                                                 if (equal? funcion create)   (
-                                                                               if (checkLogCola (ParaGetUsers paradigmadocs) user pass) (lambda (dt nb ct) (create (logIn paradigmadocs (usuario user pass)) dt nb ct)) (lambda (dt nb ct) (create paradigmadocs dt nb ct)))  finalIfGrande  ))
 
 
-(define (create paradigmadocs date nombre contenido) (
-                                                 if (loged? paradigmadocs) paradigmadocs (ParaAddDocument paradigmadocs (documento  (+ 1 (ParaLastId paradigmadocs))
+(define (login paradigmadocs user pass funcion)  (if (checkLogCola (ParaGetUsers paradigmadocs) user pass) (funcion (logIn paradigmadocs (usuario user pass))) (funcion paradigmadocs)  ))
+
+
+(define (create paradigmadocs ) ( lambda (date nombre contenido)(
+                                  if (loged? paradigmadocs) paradigmadocs (logOut (ParaAddDocument paradigmadocs (documento  (+ 1 (ParaLastId paradigmadocs))
                                                                                                       (getUser (ParaGetLoged paradigmadocs))
-                                                                                                      date nombre contenido))))
+                                                                                                      date nombre contenido))))))
 
-
+; ((create paradigma) d d d d d d d d d d )
 
 
 

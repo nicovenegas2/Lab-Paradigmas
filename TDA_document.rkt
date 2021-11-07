@@ -1,9 +1,10 @@
 #lang racket
 ; se definira el TDA de documento con la siguiente estructura de lista
-; (id, autor, fechaCreacion, historial, nombre, contenido, (usuarios), (permisos de usuarios))
+; (id, autor, fechaCreacion, historial, nombre, contenido, (usuarios con permisos ))
 
 (require "TDA_fechas.rkt")
 (require "TDA_usuarios.rkt")
+(require "TDA_access.rkt")
 
 (provide to-string)
 (provide documento)
@@ -13,10 +14,12 @@
 (provide DocumentGetVersions)
 (provide DocumentGetNombre)
 (provide DocumentGetContent)
-(provide DocumentGetUsers)
-(provide DocumentGetPerms)
+(provide DocumentGetAccess)
 (provide DocumentInfo)
 (provide DocumentAddContent)
+(provide DocumentSetAccess)
+(provide DocumentAddIAccess)
+(provide DocumentAddAccess)
 
 ; Funcion de apoyo que transforma numeros a string
 ; Dom: Numero
@@ -30,7 +33,7 @@
 
 
 ; constuctor de un documento
-; Dominio: NumeroXStringXStringXDAteXStringXString
+; Dominio: Numero X String X String X DAte X String X String
 ; Recorrido: un documento
 (define (documento id autor fechaC nombre contenido)(
                                                      list id autor fechaC '() nombre contenido '() '() ))
@@ -68,12 +71,11 @@
 ; extrae los usuarios de un documento
 ; Dominio: Documento
 ; Recorrido: lista de usuarios
-(define (DocumentGetUsers documento) (list-ref documento 6))
+(define (DocumentGetAccess documento) (list-ref documento 6))
 
-; extrae los permisos de usuarios de un documento
-; Dominio: Documento
-; Recorrido: lista de permisos 
-(define (DocumentGetPerms documento) (list-ref documento 7))
+
+(define (DocumentSetAccess documento listAccess) (Document-set documento 6 listAccess))
+
 
 
 ; Funcion que Recopila toda la informacion referente a un Documento en un string
@@ -95,6 +97,24 @@
                                                            string-append (DocumentGetContent documento) texto)))
 
 
+(define (isShared? listAccess user pos) (if (null? listAccess) -1 (
+                                                                   if (equal? (accGetName (car listAccess)) user) pos  (isShared? (cdr listAccess) user (+ 1 pos)) )))
+
+(define (DocumentAddIAccess documento access) (DocumentSetAccess documento (append (DocumentGetAccess documento) (list access)) ) )
+
+(define (DocumentEditAccess documento user type) (DocumentSetAccess documento (list-set (DocumentGetAccess documento)  (isShared? (DocumentGetAccess documento) user 0) (accSetType (list-ref (DocumentGetAccess documento) (isShared? (DocumentGetAccess documento) user 0)) type)  )))
+
+(define (DocumentAddAccess documento access) (if (= -1 (isShared? (DocumentGetAccess documento) (accGetName access) 0)) (DocumentAddIAccess documento access) (DocumentEditAccess documento (accGetName access) (accGetType access)) ))
+
+
 ;pruebas
 (define hoy (date 03 05 2002))
 (define DC1 (documento 01 "nicolas" hoy "Documento 1" "hola que tal"))
+(define ac1 (access "nico" #\w))
+(define ac2 (access "ale" #\w))
+(define ac3 (access "vic" #\w))
+(define ac4 (access "loki" #\w))
+(define lista (list ac1 ac2 ac3 ac4))
+(define dc1 (DocumentAddIAccess DC1 ac1))
+(define dc2 (DocumentAddIAccess dc1 ac2))
+(define dc3 (DocumentAddIAccess dc2 ac3))
