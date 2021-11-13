@@ -1,0 +1,4 @@
+#lang racket
+
+; Se define el tda de una version con la siguiente implementacion de lista
+; (numero, fecha cambio , contenido)

@@ -6,6 +6,7 @@
 (require "encriptar.rkt")
 (require "TDA_paradigmaDocs.rkt")
 (require "TDA_access.rkt")
+(require "TDA_version.rkt")
 
 
 
@@ -30,28 +31,38 @@
 (define (documentAddAccessList  documento accessList) (if (null? accessList) documento (documentAddAccessList (DocumentAddAccess documento (car accessList)) (cdr accessList))))
 
 (define (register paradigmadocs date username password) (
-                                                         user-set paradigmadocs 2 (
+                                                         Para-set paradigmadocs 2 (
                                                                                    agregarUsuarioNatural (ParaGetUsers paradigmadocs)
                                                                                                          (usuario username password)
                                                                                                          0 user-empty )))
 
 
-(define (login paradigmadocs user pass funcion)  (if (checkLogCola (ParaGetUsers paradigmadocs) user pass) (funcion (logIn paradigmadocs (usuario user pass))) (funcion paradigmadocs)  ))
+(define (login paradigmadocs user pass funcion)  (if (checkLogCola (ParaGetUsers paradigmadocs) user pass) (funcion (logIn paradigmadocs user)) (funcion paradigmadocs)  ))
 
 
 (define (create paradigmadocs ) ( lambda (date nombre contenido)(
-                                  if (loged? paradigmadocs) paradigmadocs (logOut (ParaAddDocument paradigmadocs (documento  (+ 1 (ParaLastId paradigmadocs))
-                                                                                                      (getUser (ParaGetLoged paradigmadocs))
-                                                                                                      date nombre contenido))))))
+                                  if (logedEmpty? paradigmadocs) paradigmadocs (logOut (ParaAddDocument paradigmadocs (documento  (+ 1 (ParaLastId paradigmadocs))
+                                                                                                      (ParaGetLoged paradigmadocs)
+                                                                                                      date nombre ((ParaGetEncrypt paradigmadocs) contenido)))))))
 
 
 
-(define (share paradigmadocs) (lambda (date id acc . access) (if (loged? paradigmadocs) paradigmadocs (
+(define (share paradigmadocs) (lambda (id acc . access) (if (logedEmpty? paradigmadocs) paradigmadocs (
                                                                                                   logOut (
-                                                                                                          ParaEditDocument paradigmadocs (ParaSearchId (ParaGetDocuments paradigmadocs) id 0) (documentAddAccessList (list-ref (ParaGetDocuments paradigmadocs) (ParaSearchId (ParaGetDocuments paradigmadocs) id 0) ) (append (list acc) access) ) ) ))  ))
-; ((create paradigma) d d d d d d d d d d )
 
 
+                                                                                                          ParaEditDocument paradigmadocs id (documentAddAccessList (list-ref (ParaGetDocuments paradigmadocs) (ParaSearchId (ParaGetDocuments paradigmadocs) id 0) ) (append (list acc) access) ) ) ))  ))
+
+
+
+(define (add paradigmadocs) (lambda (id date text) (if (logedEmpty? paradigmadocs) paradigmadocs (ParaAddVersionDocument (ParaAddTextDocument (logOut paradigmadocs) id text) id (version (ParaAutoIdVersion paradigmadocs id) date (ParaGetDocumentById paradigmadocs id) ) ) )))
+
+
+(define (restoreVersion paradigmadocs ) (lambda (idDoc idVersion) (if (logedEmpty? paradigmadocs) paradigmadocs  (ParaAddVersionDocument (ParaEditDocument (logOut paradigmadocs) idDoc (verGetContent (ParaGetVersionById paradigmadocs idVersion idDoc))) idDoc (version (ParaAutoIdVersion paradigmadocs idDoc) (date 0 0 0) (ParaGetDocumentById paradigmadocs idDoc) ) ) ) ))
+
+
+(define (revokeAllAccesses paradigmadocs)  (if (logedEmpty? paradigmadocs) paradigmadocs (
+                                                                                          ParaSetDocuments (logOut paradigmadocs) (map (lambda (doc) (DocumentRevokeAccess doc (ParaGetLoged paradigmadocs))) (ParaGetDocuments paradigmadocs)) )) )
 
 ;pruebas
 (define finalIfGrande 3)
@@ -64,11 +75,16 @@
 (define listalista (list (usuario "nico" "1234" )))
 (define word1 (register word hoy "nico" "1234"))
 (define listaUsers (list nico vic))
-(define gDocs1(register (register (register word (date 25 10 2021) "“user1”"   "“pass1”") (date 25 10 2021) "“user2”" "“pass2”") (date 25 10 2021) "user3" "pass3"))
-(define gDocs2 ((login gDocs1 "“user1”" "“pass1”" create) (date 30 08 2021) "“doc0”" "“contenido doc0”"))
 (define ac1 (access "nico" #\w))
 (define ac2 (access "ale" #\w))
-(define ac3 (access "vic" #\w))
-(define ac4 (access "aldddde" #\f))
+(define ac3 (access "vic" #\e))
+(define ac4 (access "loki" #\c))
 (define lista (list ac1 ac2 ac3 ac4))
-((login gDocs2 "“user2”" "“pass1”" share) (date 30 08 2021) 1 ac1 ac2 ac3 ac4)
+(define word2 ((login word1 "nico" "1234" create) (date 02 03 2021) "doc1" "hola que tal"))
+(define word3 (register word2 hoy "ale" "12345"))
+(define word4 ((login word3 "nico" "1234" share) 1 (access "“user2”" #\r) ac2 ac1 ac3 ac4))
+(define word5 ((login word4 "nico" "1234" add) 1 (date 12 23 2021) " sdfsdfddsfdf"))
+(define word6 ((login word5 "nico" "1234" restoreVersion) 1 0))
+
+
+

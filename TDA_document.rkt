@@ -1,10 +1,11 @@
 #lang racket
 ; se definira el TDA de documento con la siguiente estructura de lista
-; (id, autor, fechaCreacion, historial, nombre, contenido, (usuarios con permisos ))
+; (id, autor, fechaCreacion, (versiones), nombre, contenido, (usuarios con permisos ))
 
 (require "TDA_fechas.rkt")
 (require "TDA_usuarios.rkt")
 (require "TDA_access.rkt")
+(require "TDA_version.rkt")
 
 (provide to-string)
 (provide documento)
@@ -20,6 +21,8 @@
 (provide DocumentSetAccess)
 (provide DocumentAddIAccess)
 (provide DocumentAddAccess)
+(provide DocumentAddVersion)
+(provide DocumentRevokeAccess)
 
 ; Funcion de apoyo que transforma numeros a string
 ; Dom: Numero
@@ -73,7 +76,9 @@
 ; Recorrido: lista de usuarios
 (define (DocumentGetAccess documento) (list-ref documento 6))
 
-
+; extrae los accesos de un documento
+; Dominio: Documento
+; Recorrido: lista de accesos
 (define (DocumentSetAccess documento listAccess) (Document-set documento 6 listAccess))
 
 
@@ -82,30 +87,53 @@
 ; Dominio: Documento
 ; Recorrido: String
 
-(define (DocumentInfo documento) (
+(define (DocumentInfo documento FDe) (
                                   string-append
                                          "Id: " (to-string (DocumentGetId documento)) "\n"
                                          "autor: " (DocumentGetAutor documento) "\n"
                                          "Fecha de creacion: " (DateString (DocumentGetDate documento)) "\n"
                                          "Nombre: " (DocumentGetNombre documento) "\n"
-                                         "Contenido: " "\n" "\"" (DocumentGetContent documento) "\"" "\n"
+                                         "Contenido: " "\n" "\"" (FDe (DocumentGetContent documento)) "\"" "\n"
                                          "usuarios compartidos: \n"
                                          "-------------------------------------------\n"))
 
-(define (DocumentAddContent documento texto) (
+
+; funcion que añade texto al final de un documento
+; Dominio: Documento X String
+; Recorrido: Documento
+(define (DocumentAddContent documento texto FEn FDe) (
                                         Document-set documento 5 (
-                                                           string-append (DocumentGetContent documento) texto)))
+                                                           FEn(string-append (FDe(DocumentGetContent documento)) texto))))
 
 
+; funcion que revisa si un usuario esta en una lista de acceso, entrega la posicion en la que este y -1 si no se encuentra
+; Dominio:  listaAccesos X usuario X Numero
+; Recorrido: Numero
 (define (isShared? listAccess user pos) (if (null? listAccess) -1 (
                                                                    if (equal? (accGetName (car listAccess)) user) pos  (isShared? (cdr listAccess) user (+ 1 pos)) )))
-
+; funcion que añade un acceso sin tomar en cuenta ninguna restriccion
+; Dominio: documento X acceso
+; Recorrido: documento
 (define (DocumentAddIAccess documento access) (DocumentSetAccess documento (append (DocumentGetAccess documento) (list access)) ) )
 
+; funcion que edita un acceso sin tomar en cuenta ninguna restriccion
+; Dominio: documento X String X caracter
+; Recorrido: documento
 (define (DocumentEditAccess documento user type) (DocumentSetAccess documento (list-set (DocumentGetAccess documento)  (isShared? (DocumentGetAccess documento) user 0) (accSetType (list-ref (DocumentGetAccess documento) (isShared? (DocumentGetAccess documento) user 0)) type)  )))
 
+; funcion que añade un acceso tomando en cuenta restricciones
+; Dominio: documento X acceso
+; Recorrido: documento
 (define (DocumentAddAccess documento access) (if (= -1 (isShared? (DocumentGetAccess documento) (accGetName access) 0)) (DocumentAddIAccess documento access) (DocumentEditAccess documento (accGetName access) (accGetType access)) ))
 
+
+(define (DocumentAddVersion documento version) (Document-set documento 3 (append (list version) (DocumentGetVersions documento)) ))
+
+
+(define (isCreator? documento user) (if (equal? user (DocumentGetAutor documento)) #t #f))
+
+
+(define (DocumentRevokeAccess documento user) (if (isCreator? documento user) (DocumentSetAccess documento '() ) documento))
 
 ;pruebas
 (define hoy (date 03 05 2002))
