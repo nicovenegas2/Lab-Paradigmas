@@ -55,7 +55,7 @@
 
 
 
-(define (add paradigmadocs) (lambda (id date text) (if (logedEmpty? paradigmadocs) paradigmadocs (ParaAddVersionDocument (ParaAddTextDocument (logOut paradigmadocs) id text) id (version (ParaAutoIdVersion paradigmadocs id) date (ParaGetDocumentById paradigmadocs id) ) ) )))
+(define (add paradigmadocs) (lambda (id date text) (if (logedEmpty? paradigmadocs) paradigmadocs (ParaAddVersionDocument (ParaAddTextDocument (logOut paradigmadocs) id text) id (version (ParaAutoIdVersion paradigmadocs id) date (DocumentGetContent (ParaGetDocumentById paradigmadocs id)) ) ) )))
 
 
 (define (restoreVersion paradigmadocs ) (lambda (idDoc idVersion) (if (logedEmpty? paradigmadocs) paradigmadocs  (ParaAddVersionDocument (ParaEditDocument (logOut paradigmadocs) idDoc (verGetContent (ParaGetVersionById paradigmadocs idVersion idDoc))) idDoc (version (ParaAutoIdVersion paradigmadocs idDoc) (date 0 0 0) (ParaGetDocumentById paradigmadocs idDoc) ) ) ) ))
@@ -63,6 +63,10 @@
 
 (define (revokeAllAccesses paradigmadocs)  (if (logedEmpty? paradigmadocs) paradigmadocs (
                                                                                           ParaSetDocuments (logOut paradigmadocs) (map (lambda (doc) (DocumentRevokeAccess doc (ParaGetLoged paradigmadocs))) (ParaGetDocuments paradigmadocs)) )) )
+
+
+(define (search paradigmadocs)  (lambda (text) (
+                                                if (logedEmpty? paradigmadocs) null (filter  (lambda (doc) (string-contains? ((ParaGetDecrypt paradigmadocs)(DocumentGetContent doc)) text ))   (filter (lambda (doc) (DocumentIsInvolved? doc (ParaGetLoged paradigmadocs))) (ParaGetDocuments paradigmadocs))   ))))
 
 ;pruebas
 (define finalIfGrande 3)

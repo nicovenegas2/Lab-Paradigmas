@@ -23,6 +23,9 @@
 (provide DocumentAddAccess)
 (provide DocumentAddVersion)
 (provide DocumentRevokeAccess)
+(provide isInvolved?)
+(provide DocumentIsInvolved?)
+(provide DocumentSetContent)
 
 ; Funcion de apoyo que transforma numeros a string
 ; Dom: Numero
@@ -134,6 +137,18 @@
 
 
 (define (DocumentRevokeAccess documento user) (if (isCreator? documento user) (DocumentSetAccess documento '() ) documento))
+
+
+(define (isInvolved? accessList user) (if (null? accessList) #f (
+                                                                 if (equal? user (accGetName (car accessList))) #t (isInvolved? (cdr accessList) user ))  ))
+
+
+(define (DocumentIsInvolved? document user) (
+                                             if (or (isInvolved? (DocumentGetAccess document) user) (equal? user (DocumentGetAutor document))) #t #f))
+
+
+(define (DocumentSetContent document content) (Document-set document 5 content))
+
 
 ;pruebas
 (define hoy (date 03 05 2002))

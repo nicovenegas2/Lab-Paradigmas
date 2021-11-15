@@ -37,6 +37,7 @@
 (provide ParaGetDocumentById)
 (provide ParaGetVersionById)
 (provide ParaSetDocuments)
+(provide ParaSetContentDoc)
 
 
 (define Para-set list-set)
@@ -179,7 +180,7 @@
 (define (ParaGetVersionById paradigmadocs idVersion idDocument) (ParaSearchVersion (DocumentGetVersions (ParaGetDocumentById paradigmadocs idDocument)) idVersion ))
 
 
-
+(define (ParaSetContentDoc paradigmadocs idDoc content) (ParaEditDocument paradigmadocs idDoc (DocumentSetContent (ParaGetDocumentById paradigmadocs idDoc) content))) 
 
 ;pruebas
 (define us1 (usuario "nicovenegas" "1234"))
