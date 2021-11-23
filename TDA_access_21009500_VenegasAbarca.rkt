@@ -7,6 +7,7 @@
 (provide accGetName)
 (provide accGetType)
 (provide accSetType)
+(provide accInfo)
 
 ; constructor de un access
 ; Dominio: String X caracter 
@@ -27,4 +28,11 @@
 ; Dominio: access X caracter 
 ; Recorrido: access
 (define (accSetType access type) (list-set access 1 type))
+
+(define (accInfo access) (
+                          string-append  (accGetName access) ": permiso #" (make-string 1 (accGetType access)) " " "\n"))
+
+
+
+
 

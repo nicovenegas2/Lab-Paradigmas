@@ -1,12 +1,12 @@
 #lang racket
 
-(require "TDA_fechas.rkt")
-(require "TDA_usuarios.rkt")
-(require "TDA_document.rkt")
-(require "encriptar.rkt")
-(require "TDA_paradigmaDocs.rkt")
-(require "TDA_access.rkt")
-(require "TDA_version.rkt")
+(require "TDA_fechas_21009500_VenegasAbarca.rkt")
+(require "TDA_usuarios_21009500_VenegasAbarca.rkt")
+(require "TDA_document_21009500_VenegasAbarca.rkt")
+(require "encriptar_21009500_VenegasAbarca.rkt")
+(require "TDA_paradigmaDocs_21009500_VenegasAbarca.rkt")
+(require "TDA_access_21009500_VenegasAbarca.rkt")
+(require "TDA_version_21009500_VenegasAbarca.rkt")
 
 
 
@@ -58,7 +58,7 @@
 (define (add paradigmadocs) (lambda (id date text) (if (logedEmpty? paradigmadocs) paradigmadocs (ParaAddVersionDocument (ParaAddTextDocument (logOut paradigmadocs) id text) id (version (ParaAutoIdVersion paradigmadocs id) date (DocumentGetContent (ParaGetDocumentById paradigmadocs id)) ) ) )))
 
 
-(define (restoreVersion paradigmadocs ) (lambda (idDoc idVersion) (if (logedEmpty? paradigmadocs) paradigmadocs  (ParaAddVersionDocument (ParaEditDocument (logOut paradigmadocs) idDoc (verGetContent (ParaGetVersionById paradigmadocs idVersion idDoc))) idDoc (version (ParaAutoIdVersion paradigmadocs idDoc) (date 0 0 0) (ParaGetDocumentById paradigmadocs idDoc) ) ) ) ))
+(define (restoreVersion paradigmadocs ) (lambda (idDoc idVersion) (if (logedEmpty? paradigmadocs) paradigmadocs  (ParaAddVersionDocument (ParaSetContentDoc paradigmadocs idDoc (verGetContent (ParaGetVersionById paradigmadocs idVersion idDoc)) ) idDoc (version (ParaAutoIdVersion paradigmadocs idDoc) (date 0 0 0) (DocumentGetContent (ParaGetDocumentById paradigmadocs idDoc)) ) )    )))
 
 
 (define (revokeAllAccesses paradigmadocs)  (if (logedEmpty? paradigmadocs) paradigmadocs (
@@ -89,6 +89,5 @@
 (define word4 ((login word3 "nico" "1234" share) 1 (access "“user2”" #\r) ac2 ac1 ac3 ac4))
 (define word5 ((login word4 "nico" "1234" add) 1 (date 12 23 2021) " sdfsdfddsfdf"))
 (define word6 ((login word5 "nico" "1234" restoreVersion) 1 0))
-
-
+(define accesso (DocumentGetAccess (ParaGetDocumentById word6 1))   )
 
