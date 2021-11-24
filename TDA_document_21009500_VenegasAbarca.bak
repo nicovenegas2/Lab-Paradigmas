@@ -2,10 +2,10 @@
 ; se definira el TDA de documento con la siguiente estructura de lista
 ; (id, autor, fechaCreacion, (versiones), nombre, contenido, (usuarios con permisos ))
 
-(require "TDA_fechas.rkt")
-(require "TDA_usuarios.rkt")
-(require "TDA_access.rkt")
-(require "TDA_version.rkt")
+(require "TDA_fechas_21009500_VenegasAbarca.rkt")
+(require "TDA_usuarios_21009500_VenegasAbarca.rkt")
+(require "TDA_access_21009500_VenegasAbarca.rkt")
+(require "TDA_version_21009500_VenegasAbarca.rkt")
 
 (provide to-string)
 (provide documento)
@@ -98,6 +98,7 @@
                                          "Nombre: " (DocumentGetNombre documento) "\n"
                                          "Contenido: " "\n" "\"" (FDe (DocumentGetContent documento)) "\"" "\n"
                                          "usuarios compartidos: \n"
+                                         (string-join (map accInfo (DocumentGetAccess documento)))
                                          "-------------------------------------------\n"))
 
 
@@ -130,23 +131,40 @@
 (define (DocumentAddAccess documento access) (if (= -1 (isShared? (DocumentGetAccess documento) (accGetName access) 0)) (DocumentAddIAccess documento access) (DocumentEditAccess documento (accGetName access) (accGetType access)) ))
 
 
+
+; funcion que añade una version a un documento
+; Dominio: documento X version
+; Recorrido: documento
 (define (DocumentAddVersion documento version) (Document-set documento 3 (append (list version) (DocumentGetVersions documento)) ))
 
-
+; funcion que verifica si un usuario es creador de un documento
+; Dominio: documento X String
+; Recorrido: documento
 (define (isCreator? documento user) (if (equal? user (DocumentGetAutor documento)) #t #f))
 
-
+; funcion que elimina la lista de accesos tomando en cuenta restricciones
+; Dominio: documento X String
+; Recorrido: documento
 (define (DocumentRevokeAccess documento user) (if (isCreator? documento user) (DocumentSetAccess documento '() ) documento))
 
 
+; funcion que verifica si un usuario esta ingresado en un documento, tanto como autor como usuario compartido
+; Dominio: listaAccesos X String
+; Recorrido: boolean
 (define (isInvolved? accessList user) (if (null? accessList) #f (
                                                                  if (equal? user (accGetName (car accessList))) #t (isInvolved? (cdr accessList) user ))  ))
 
 
+; funcion que verifica si un usuario esta ingresado en un documento, tanto como autor como usuario compartido a nivel de documento
+; Dominio: documento X usuario
+; Recorrido: documento
 (define (DocumentIsInvolved? document user) (
                                              if (or (isInvolved? (DocumentGetAccess document) user) (equal? user (DocumentGetAutor document))) #t #f))
 
 
+; funcion setea el contenido de un documento
+; Dominio: documento X String
+; Recorrido: documento
 (define (DocumentSetContent document content) (Document-set document 5 content))
 
 

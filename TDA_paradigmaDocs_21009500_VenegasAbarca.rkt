@@ -11,33 +11,7 @@
 
 
 
-(provide paradigmadocs)
-(provide ParaGetNombre)
-(provide ParaGetDate)
-(provide ParaGetUsers)
-(provide ParaGetDocuments)
-(provide ParaGetEncrypt)
-(provide ParaGetDecrypt)
-(provide ParaAddUser)
-(provide ParaInfo)
-(provide logedEmpty?)
-(provide logIn)
-(provide logOut)
-(provide ParaSetUsers)
-(provide ParaLastId)
-(provide ParaAddDocument)
-(provide ParaGetLoged)
-(provide ParaEditDocument)
-(provide ParaSearchId)
-(provide Para-set)
-(provide ParaCanEdit?)
-(provide ParaAddTextDocument)
-(provide ParaAddVersionDocument)
-(provide ParaAutoIdVersion)
-(provide ParaGetDocumentById)
-(provide ParaGetVersionById)
-(provide ParaSetDocuments)
-(provide ParaSetContentDoc)
+(provide (all-defined-out))
 
 (define Para-set list-set)
 
@@ -112,6 +86,18 @@
                                                 "documentos creados: " "\n"
                                                  "-------------------------------------------\n"
                                                 (string-join (map (lambda (docs) (DocumentInfo docs (ParaGetDecrypt paradigmadocs))) (ParaGetDocuments paradigmadocs)))          ))
+
+
+
+(define (ParaInfoUser paradigmadocs usuario) (
+                                  string-append
+                                                "Usuario Logeado: " (ParaGetLoged paradigmadocs) "\n"
+                                                "Fecha de registro: "  (DateString (ParaGetDateUserByName (ParaGetUsers paradigmadocs)  (ParaGetLoged paradigmadocs ))) "\n"
+                                                "Nombre de la plataforma: " (ParaGetNombre paradigmadocs) "\n"
+                                                "Fecha de creacion de la plataforma: " (DateString (ParaGetDate paradigmadocs)) "\n"
+                                                "documentos donde " (ParaGetLoged paradigmadocs) " está involucrado: \n"
+                                                 "-------------------------------------------\n"
+                                                (string-join (map (lambda (docs) (DocumentInfo docs (ParaGetDecrypt paradigmadocs))) (filter (lambda (doc) (DocumentIsInvolved? doc usuario)) (ParaGetDocuments paradigmadocs))           ))          ))
 
 ; funcion setea la lista de usuarios
 ; Dominio: paradigmadocs X listaUsuarios
@@ -210,8 +196,11 @@
 ; Recorrido: paradigmadocs
 (define (ParaSetContentDoc paradigmadocs idDoc content) (ParaEditDocument paradigmadocs idDoc (DocumentSetContent (ParaGetDocumentById paradigmadocs idDoc) content))) 
 
+
+(define (ParaGetDateUserByName listUsers user) (if (null? listUsers) (date -1 -1 -1) (if (equal? (getUser(car listUsers)) user) (UserGetDate (car listUsers)) (ParaGetDateUserByName (cdr listUsers) user)) ))
+
 ;pruebas
-(define us1 (usuario "nicovenegas" "1234"))
+(define us1 (usuario "nicovenegas" "1234" (date 03 05 2021)))
 (define word (paradigmadocs "word" (date 24 10 2021) encryptFn encryptFn))
 (define hoy (date 03 05 2002))
 (define DC1 (documento 01 "nicolas" hoy "Documento 1" (encryptFn "hola que tal")))
@@ -223,7 +212,7 @@
 (define dc1 (DocumentAddIAccess DC1 ac1))
 (define dc2 (DocumentAddIAccess dc1 ac2))
 (define dc3 (DocumentAddIAccess dc2 ac3))
-(define ale (usuario "ale" "1234"))
+(define ale (usuario "ale" "1234" (date 03 05 2021)))
 (define word1 (ParaAddDocument word dc3))
 (define word2 (ParaAddDocument word1 dc1))
 (define word3 (ParaAddDocument word2 dc2))

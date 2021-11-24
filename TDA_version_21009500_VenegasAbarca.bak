@@ -3,7 +3,10 @@
 ; Se define el tda de una version con la siguiente implementacion de lista
 ; (numero, fecha cambio , contenido)
 
-(provide (all-defined-out))
+(provide version)
+(provide verGetNumber)
+(provide verGetNumber)
+(provide verGetContent)
 
 
 ; constructor de una version

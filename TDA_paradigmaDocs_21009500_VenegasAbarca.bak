@@ -2,12 +2,12 @@
 ; se define el TDA de paradigmaDocs con la siguiente implementacion de lista
 ; (nombrePlataforma, FechaCreacion, (usuarios), (documentos), funcion encriptar, funcion desencriptar, usuarioLogeado?)
 
-(require "TDA_fechas.rkt")
-(require "TDA_usuarios.rkt")
-(require "TDA_document.rkt")
-(require "encriptar.rkt")
-(require "TDA_access.rkt")
-(require "TDA_version.rkt")
+(require "TDA_fechas_21009500_VenegasAbarca.rkt")
+(require "TDA_usuarios_21009500_VenegasAbarca.rkt")
+(require "TDA_document_21009500_VenegasAbarca.rkt")
+(require "encriptar_21009500_VenegasAbarca.rkt")
+(require "TDA_access_21009500_VenegasAbarca.rkt")
+(require "TDA_version_21009500_VenegasAbarca.rkt")
 
 
 
@@ -38,7 +38,6 @@
 (provide ParaGetVersionById)
 (provide ParaSetDocuments)
 (provide ParaSetContentDoc)
-
 
 (define Para-set list-set)
 
@@ -112,7 +111,7 @@
                                                 "Fecha de creacion: " (DateString (ParaGetDate paradigmadocs)) "\n"
                                                 "documentos creados: " "\n"
                                                  "-------------------------------------------\n"
-                                                (string-join (map (lambda (docs) (DocumentInfo docs (ParaGetDecrypt paradigmadocs))) (ParaGetDocuments paradigmadocs)))  ))
+                                                (string-join (map (lambda (docs) (DocumentInfo docs (ParaGetDecrypt paradigmadocs))) (ParaGetDocuments paradigmadocs)))          ))
 
 ; funcion setea la lista de usuarios
 ; Dominio: paradigmadocs X listaUsuarios
@@ -151,35 +150,64 @@
 
 
 
+
+; funcion que verifica si un usuario esta ingresado en una lista de accesos con permiso de escritura
+; Dominio: ListaAccesos X String X String
+; Recorrido: Boolean
 (define (canEdit? accessList creator usuario)  (if (equal? creator usuario) #t (
                                                                                 if (null? accessList)
                                                                                    (2)
                                                                                    (if (equal? (accGetType (car accessList)) #\w) #t (canEdit? (cdr accessList) creator usuario))   )))
 
+; funcion que verifica si un usuario esta ingresado en una lista de accesos con permiso de escritura
+; Dominio: ListaAccesos X String X String
+; Recorrido: Boolean
 (define (ParaCanEdit? accessList creator usuario) (ormap (lambda (access) (
                                                                            if (equal? usuario creator) #t (
                                                                                                            if (equal? usuario (accGetName access)) (
                                                                                                                                                     if (equal? #\w (accGetType access)) #t #f) #f)) )  accessList))
 
+
+
+
+
+; funcion que añade contenido a un paradigmadocs
+; Dominio: Paradigmadocs X numero X String
+; Recorrido: paradigmadocs
 (define (ParaAddTextDocument paradigmadocs id text) (ParaEditDocument paradigmadocs id (
                                                                                           DocumentAddContent (list-ref (ParaGetDocuments paradigmadocs) (ParaSearchId (ParaGetDocuments paradigmadocs) id 0)) text (ParaGetEncrypt paradigmadocs) (ParaGetDecrypt paradigmadocs) ))) 
 
 
-
+; funcion que añade una version a un paradigmadocs
+; Dominio: Paradigmadocs X numero X version
+; Recorrido: paradigmadocs
 (define (ParaAddVersionDocument paradigmadocs id version) (ParaEditDocument paradigmadocs id  (DocumentAddVersion (list-ref (ParaGetDocuments paradigmadocs) (ParaSearchId (ParaGetDocuments paradigmadocs) id 0)) version)  ))
 
 
+; funcion que crea automaticamente un id para una version en un documento de paradigmadocs
+; Dominio: Paradigmadocs X numero
+; Recorrido: paradigmadocs
 (define (ParaAutoIdVersion paradigmadocs id) (length (DocumentGetVersions (list-ref (ParaGetDocuments paradigmadocs) (ParaSearchId (ParaGetDocuments paradigmadocs) id 0))) ))
 
-
+; funcion que extrae un documento de paradigmadocs mediante su id
+; Dominio: Paradigmadocs X numero
+; Recorrido: documento
 (define (ParaGetDocumentById paradigmadocs id) (list-ref (ParaGetDocuments paradigmadocs) (ParaSearchId (ParaGetDocuments paradigmadocs) id 0)))
 
+
+; funcion busca una version en una lista de versiones mediante el id
+; Dominio: lista de versiones X numero
+; Recorrido: boolean/version
 (define (ParaSearchVersion listVersions idVersion) (if (null? listVersions) #f  (if (= (verGetNumber (car listVersions)) idVersion) (car listVersions) (ParaSearchVersion (cdr listVersions) idVersion))  ))
 
-
+; funcion busca una version en un documento de paradigmadocs mediante el id
+; Dominio: paradigmadocs X numero X numero
+; Recorrido: version
 (define (ParaGetVersionById paradigmadocs idVersion idDocument) (ParaSearchVersion (DocumentGetVersions (ParaGetDocumentById paradigmadocs idDocument)) idVersion ))
 
-
+; funcion que setea el contedido de un documento que esta en un paradigmadocs mediante su id
+; Dominio: paradigmadocs X numero X String
+; Recorrido: paradigmadocs
 (define (ParaSetContentDoc paradigmadocs idDoc content) (ParaEditDocument paradigmadocs idDoc (DocumentSetContent (ParaGetDocumentById paradigmadocs idDoc) content))) 
 
 ;pruebas

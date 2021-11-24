@@ -1,6 +1,6 @@
 #lang racket
 ; Se definira el tda usuario con los siguientes elementos
-; (nombre, contraseña, fechaDeRegistro)
+; (nombre, contraseña)
 ; se tomara en consideracion que los usuarios siempren se almacenaran en listas para funciones de busqueda
 
 (provide (all-defined-out))
@@ -11,12 +11,11 @@
 (define user-next cdr)
 (define user-first car)
 (define user-empty '())
-
 ; Constructor de un usuario
 ; Dom: StringXString
 ; Rec: usuario
-(define (usuario user pass date) (
-                             list user pass date))
+(define (usuario user cont) (
+                             list user cont))
 
 ; obtencion del nombre de un usuario
 ; Dom: usuario
@@ -27,11 +26,6 @@
 ; Dom: usuario
 ; Rec: String
 (define (getPass usuario) (list-ref usuario 1))
-
-
-
-(define (UserGetDate usuario) (list-ref usuario 2))
-
 
 ; comprobacion de si es un usuario o no
 ; Dom: SupuestoUser
