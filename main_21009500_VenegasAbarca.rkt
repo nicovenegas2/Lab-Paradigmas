@@ -8,7 +8,7 @@
 (require "TDA_access_21009500_VenegasAbarca.rkt")
 (require "TDA_version_21009500_VenegasAbarca.rkt")
 
-
+(provide (all-defined-out))
 
 (define (agregarUsuarioNatural lista usuario cond result)(
                       if (null? lista)
@@ -55,7 +55,14 @@
 
 
 
-(define (add paradigmadocs) (lambda (id date text) (if (logedEmpty? paradigmadocs) paradigmadocs (ParaAddVersionDocument (ParaAddTextDocument (logOut paradigmadocs) id text) id (version (ParaAutoIdVersion paradigmadocs id) date (DocumentGetContent (ParaGetDocumentById paradigmadocs id)) ) ) )))
+(define (add paradigmadocs) (lambda (id date text) (if (logedEmpty? paradigmadocs) paradigmadocs
+                                                       (if (ParaCanEdit? (DocumentGetAccess (ParaGetDocumentById paradigmadocs id)) (DocumentGetAutor (ParaGetDocumentById paradigmadocs id)) (ParaGetLoged paradigmadocs)  )
+                                                           (ParaAddVersionDocument (ParaAddTextDocument (logOut paradigmadocs) id text) id (version (ParaAutoIdVersion paradigmadocs id) date (DocumentGetContent (ParaGetDocumentById paradigmadocs id)) ) )
+                                                           paradigmadocs )
+                                                       )))
+
+
+
 
 
 (define (restoreVersion paradigmadocs ) (lambda (idDoc idVersion) (if (logedEmpty? paradigmadocs) paradigmadocs  (ParaAddVersionDocument (ParaSetContentDoc paradigmadocs idDoc (verGetContent (ParaGetVersionById paradigmadocs idVersion idDoc)) ) idDoc (version (ParaAutoIdVersion paradigmadocs idDoc) (date 0 0 0) (DocumentGetContent (ParaGetDocumentById paradigmadocs idDoc)) ) )    )))
@@ -72,6 +79,7 @@
 
 (define (paradigmadocs->string paradigmadocs ) (if (logedEmpty? paradigmadocs) (ParaInfo paradigmadocs) (ParaInfoUser paradigmadocs (ParaGetLoged paradigmadocs)))   )
 ;pruebas
+#|
 (define finalIfGrande 3)
 (define us1 (usuario "nicovenegas" "1234" (date 03 05 2021)))
 (define word (paradigmadocs "word" (date 24 10 2021) encryptFn encryptFn))
@@ -80,7 +88,7 @@
 (define nico (usuario "nico" "1234" (date 03 05 2021)))
 (define vic (usuario "vic" 1234444 (date 03 05 2021)))
 (define listalista (list (usuario "nico" "1234" (date 03 05 2021))))
-(define word1 (register word hoy "nico" "1234"))
+(define word1 )
 (define listaUsers (list nico vic))
 (define ac1 (access "nico" #\w))
 (define ac2 (access "ale" #\w))
@@ -93,4 +101,6 @@
 (define word5 ((login word4 "nico" "1234" add) 1 (date 12 23 2021) " sdfsdfddsfdf"))
 (define word6 ((login word5 "nico" "1234" restoreVersion) 1 0))
 (define accesso (DocumentGetAccess (ParaGetDocumentById word6 1))   )
+|#
+
 

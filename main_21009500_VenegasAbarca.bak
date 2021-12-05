@@ -8,7 +8,7 @@
 (require "TDA_access_21009500_VenegasAbarca.rkt")
 (require "TDA_version_21009500_VenegasAbarca.rkt")
 
-
+(provide (all-defined-out))
 
 (define (agregarUsuarioNatural lista usuario cond result)(
                       if (null? lista)
@@ -33,7 +33,7 @@
 (define (register paradigmadocs date username password) (
                                                          Para-set paradigmadocs 2 (
                                                                                    agregarUsuarioNatural (ParaGetUsers paradigmadocs)
-                                                                                                         (usuario username password)
+                                                                                                         (usuario username password date)
                                                                                                          0 user-empty )))
 
 
@@ -68,15 +68,18 @@
 (define (search paradigmadocs)  (lambda (text) (
                                                 if (logedEmpty? paradigmadocs) null (filter  (lambda (doc) (string-contains? ((ParaGetDecrypt paradigmadocs)(DocumentGetContent doc)) text ))   (filter (lambda (doc) (DocumentIsInvolved? doc (ParaGetLoged paradigmadocs))) (ParaGetDocuments paradigmadocs))   ))))
 
+
+
+(define (paradigmadocs->string paradigmadocs ) (if (logedEmpty? paradigmadocs) (ParaInfo paradigmadocs) (ParaInfoUser paradigmadocs (ParaGetLoged paradigmadocs)))   )
 ;pruebas
 (define finalIfGrande 3)
-(define us1 (usuario "nicovenegas" "1234"))
+(define us1 (usuario "nicovenegas" "1234" (date 03 05 2021)))
 (define word (paradigmadocs "word" (date 24 10 2021) encryptFn encryptFn))
 (define hoy (date 03 05 2002))
 (define DC1 (documento 01 "nicolas" hoy "Documento 1" "hola que tal"))
-(define nico (usuario "nico" "1234"))
-(define vic (usuario "vic" 1234444))
-(define listalista (list (usuario "nico" "1234" )))
+(define nico (usuario "nico" "1234" (date 03 05 2021)))
+(define vic (usuario "vic" 1234444 (date 03 05 2021)))
+(define listalista (list (usuario "nico" "1234" (date 03 05 2021))))
 (define word1 (register word hoy "nico" "1234"))
 (define listaUsers (list nico vic))
 (define ac1 (access "nico" #\w))
