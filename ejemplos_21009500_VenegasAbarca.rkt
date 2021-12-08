@@ -47,3 +47,28 @@
 (define word6 (login word5 "nico" "1234" revokeAllAccesses))
 (define excel6 (login excel5 "Loki" "4321" revokeAllAccesses))
 (define gDocs6 (login gDocs5 "cody" "5678" revokeAllAccesses))
+
+
+;se crean mas documentos en las distintas plataformas con el fin de probar la funcion search (se restaunran los accesos anteriores)
+(define word7 ((login word5 "nico" "1234" create) (date 12 12 2021) "segundo docucumento" "Prueba de segundo documento")  )
+(define excel7 ((login excel5 "nico" "1234" create) (date 07 10 2021) "prueba Nico" "contenido nico")  )
+(define gDocs7 ((login gDocs5 "Loki" "4321" create) (date 08 08 2021) "Documento Loki" "contenido de loki")  )
+
+
+; distintas usuarios buscan documentos mediante una palabra clave
+(define search1 ((login word7 "nico" "1234" search) "tro"))
+(define search2 ((login excel7 "nico" "1234" search) "Master"))
+(define search3 ((login gDocs7 "Loki" "4321" search) "contenido"))
+(define searchNull ((login gDocs7 "Loki" "4321" search) "conclusion"))
+
+;se imprime la informacion de los paradigmadocs creados y luego la relacionada a ciertos usuarios
+
+(display (paradigmadocs->string word7))
+(display (paradigmadocs->string excel7))
+(display (paradigmadocs->string gDocs7))
+(display (login word7 "nico" "1234" paradigmadocs->string))
+(display (login excel7 "Loki" "4321" paradigmadocs->string))
+(display (login gDocs7 "cody" "5678" paradigmadocs->string))
+(display (login gDocs7 "nico" "1234" paradigmadocs->string))
+
+
